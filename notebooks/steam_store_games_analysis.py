@@ -33,3 +33,19 @@ print("Duplicate appid:", df["appid"].duplicated().sum())
 print("Repeated names:", df["name"].duplicated().sum())  # different games, kept
 df = df.drop_duplicates().drop_duplicates("appid")
 df["name"] = df["name"].str.strip()
+
+# ---------------- Data types ----------------
+df["release_date"] = pd.to_datetime(df["release_date"])
+df["release_year"] = df["release_date"].dt.year
+df["english"] = df["english"].astype(bool)
+df["required_age"] = df["required_age"].astype("int8")
+
+rng = df["owners"].str.split("-", expand=True).astype(int)
+df["owners_mid"] = (rng[0] + rng[1]) / 2
+
+df["total_ratings"] = df["positive_ratings"] + df["negative_ratings"]
+df["positive_pct"] = df["positive_ratings"] / df["total_ratings"].replace(0, np.nan) * 100
+df["is_free"] = df["price"] == 0
+df["mac"] = df["platforms"].str.contains("mac")
+df["linux"] = df["platforms"].str.contains("linux")
+print(df.dtypes)
