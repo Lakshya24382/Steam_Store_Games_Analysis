@@ -26,3 +26,10 @@ print(df.isna().sum()[df.isna().sum() > 0])
 df["developer"] = df["developer"].fillna("Unknown")
 df["publisher"] = df["publisher"].fillna("Unknown")
 print("Nulls left:", df.isna().sum().sum())
+
+# ---------------- Duplicates ----------------
+print("Duplicate rows:", df.duplicated().sum())
+print("Duplicate appid:", df["appid"].duplicated().sum())
+print("Repeated names:", df["name"].duplicated().sum())  # different games, kept
+df = df.drop_duplicates().drop_duplicates("appid")
+df["name"] = df["name"].str.strip()
