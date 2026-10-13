@@ -49,3 +49,14 @@ df["is_free"] = df["price"] == 0
 df["mac"] = df["platforms"].str.contains("mac")
 df["linux"] = df["platforms"].str.contains("linux")
 print(df.dtypes)
+
+# ---------------- Outliers (IQR) ----------------
+for c in ["price", "average_playtime", "positive_ratings", "achievements"]:
+    q1, q3 = df[c].quantile([.25, .75])
+    hi = q3 + 1.5 * (q3 - q1)
+    print(f"{c}: upper limit={hi:.1f}, outliers={(df[c] > hi).sum()}, max={df[c].max()}")
+
+for c in ["price", "average_playtime", "positive_ratings"]:
+    df[c + "_capped"] = df[c].clip(upper=df[c].quantile(.99))
+
+paid_all = df[df.price > 0]
