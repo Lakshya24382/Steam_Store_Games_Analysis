@@ -20,3 +20,9 @@ def save(name):
 df = pd.read_csv("dataset/steam.csv")
 print("Shape:", df.shape)
 print(df.head())
+
+# ---------------- Missing values ----------------
+print(df.isna().sum()[df.isna().sum() > 0])
+df["developer"] = df["developer"].fillna("Unknown")
+df["publisher"] = df["publisher"].fillna("Unknown")
+print("Nulls left:", df.isna().sum().sum())
